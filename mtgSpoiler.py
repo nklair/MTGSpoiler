@@ -1,6 +1,6 @@
 from BSCrawlerMTGS import BSCrawlerMTGS
 from EmailAlert import EmailAlert
-from twilio.rest import Client
+from TextAlert import TextAlert
 
 
 class MTGSpoiler():
@@ -18,5 +18,5 @@ class MTGSpoiler():
 	def checkAndSend(self, website, recipients):
 		sendNewCardAlert(recipients, checkForCards(website), website)
 
-email = EmailAlert()
-email.send('nklair@nd.edu', ['Test Card Name', 'Another test card'], 'www.google.com')
+email = TextAlert()
+email.send('16307709523', ['Test Card Name', 'Another test card'], 'www.google.com')

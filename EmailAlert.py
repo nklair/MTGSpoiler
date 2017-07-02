@@ -8,17 +8,13 @@ class EmailAlert:
 		pass
 
 	def send(self, recipient, cards, website):
-		message = ''
 		subject = ''
 		if len(cards) == 1:
 			subject = 'A new card has been spoiled!\n'
 		else:
 			subject = 'New cards have been spoiled!\n'
 
-		for cardName in cards:
-			message += cardName + '\n'
-
-		message += website
+		message = self.generateMessage(cards, website)
 
 		msg = MIMEText(message)
 
@@ -44,3 +40,11 @@ class EmailAlert:
 		mail.login(emailUsername, emailPassword)
 		mail.sendmail(fromEmail, [recipient], msg.as_string())
 		mail.quit()
+
+	def generateMessage(self, card, website):
+		message = ''
+		for cardName in cards:
+			message += cardName + '\n'
+
+		message += website
+		return message
