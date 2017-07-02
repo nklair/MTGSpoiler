@@ -11,7 +11,7 @@ class EmailAlert:
 		subject = ''
 		if len(cards) == 1:
 			subject = 'A new card has been spoiled!\n'
-		else:
+		elif len(cards) != 0:
 			subject = 'New cards have been spoiled!\n'
 
 		message = self.generateMessage(cards, website)
@@ -29,19 +29,16 @@ class EmailAlert:
 			print('Environment variables not properly set.')
 			return
 
-
-
 		msg['Subject'] = subject
 		msg['From'] = fromEmail
 		msg['To'] = recipient
-
 
 		mail = smtplib.SMTP(smtpServer, smtpPort)
 		mail.login(emailUsername, emailPassword)
 		mail.sendmail(fromEmail, [recipient], msg.as_string())
 		mail.quit()
 
-	def generateMessage(self, card, website):
+	def generateMessage(self, cards, website):
 		message = ''
 		for cardName in cards:
 			message += cardName + '\n'

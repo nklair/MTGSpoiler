@@ -1,20 +1,23 @@
-from BSCrawlerMTGS import BSCrawlerMTGS
-from EmailAlert import EmailAlert
-from TextAlert import TextAlert
-
+from CrawlerFactory import CrawlerFactory
+from AlertFactory import AlertFactory
 
 class MTGSpoiler():
-	def __init__(self, methods, alerts):
-		self.crawler = BSCrawlerMTGS()
-		self.alert = EmailAlert()
+	def __init__(self, crawlMethod='BSMTGS', alerts=['email']):
+		self.crawler = CrawlerFactory().create(crawlMethod)
+		self.alerts = AlertFactory().create(alerts)
 
-	def checkForCards(self, website):
-		return self.crawler.getCards(website)
+	def checkForCards(self, website, minutes=5):
+		if self.crawler is None:
+			return []
+		return self.crawler.getCards(website, minutes)
 
-	def sendNewCardAlert(self, recipients, cards):
+	def sendNewCardAlert(self, recipients, cards, website):
+		if len(cards) == 0:
+			return
 		for recipient in recipients:
-			self.alert.send(recipient, cards, website)
+			for alert in self.alerts:
+				alert.send(recipient, cards, website)
 
-	def checkAndSend(self, website, recipients):
-		sendNewCardAlert(recipients, checkForCards(website), website)
+	def checkAndSend(self, website, recipients, minutes=5):
+		self.sendNewCardAlert(recipients, self.checkForCards(website, minutes), website)
 

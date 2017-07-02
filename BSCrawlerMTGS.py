@@ -9,27 +9,27 @@ class BSCrawlerMTGS:
 	def __init__(self):
 		pass
 
-	def getCards(self, website):
+	def getCards(self, website, minutes):
 		newCards = []
-		currTime = int(time.time())
-		page = getSiteHTML(website)
+		page = self.getSiteHTML(website)
 
 		soup = BeautifulSoup(page.content, 'lxml')
 
 		foundCards = soup.find_all("div", { "class" : "spoiler-update"})
 		for card in foundCards:
-			if isNew(card):
+			if self.isNew(card, minutes):
 				newCards.append(str(card.contents[2].text))
 
 		return newCards
 
 
-	def isNew(self, cardTagInfo):
+	def isNew(self, cardTagInfo, minutes):
+		minutes = int(minutes)
+		currTime = int(time.time())
 		for data in str(cardTagInfo.contents[0]).split(' '):
 			if 'data-epoch' in data:
 				cardTime = int(data.split('=')[1].split('"')[1])
-				# Right now it checks to see if the card came out within the last 5 minutes
-				if currTime - cardTime <= 300:
+				if currTime - cardTime <= minutes * 60:
 					return True
 				else:
 					return False
