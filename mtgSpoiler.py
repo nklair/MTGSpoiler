@@ -4,7 +4,7 @@ from TextAlert import TextAlert
 
 
 class MTGSpoiler():
-	def __init__(self):
+	def __init__(self, methods, alerts):
 		self.crawler = BSCrawlerMTGS()
 		self.alert = EmailAlert()
 
@@ -18,5 +18,3 @@ class MTGSpoiler():
 	def checkAndSend(self, website, recipients):
 		sendNewCardAlert(recipients, checkForCards(website), website)
 
-email = TextAlert()
-email.send('16307709523', ['Test Card Name', 'Another test card'], 'www.google.com')
